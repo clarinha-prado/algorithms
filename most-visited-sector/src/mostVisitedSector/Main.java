@@ -26,9 +26,6 @@ public class Main {
 			
 			System.out.println("output: " + output.toString());
 			System.out.println("expected: " + Arrays.toString(expectedOutput[i]));
-			
 		}
-
 	}
-
 }
