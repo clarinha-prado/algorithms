@@ -6,43 +6,33 @@ public class Solution {
 
 	public int subsetXORSum(int[] nums) {
 		int sum = 0;
-		int partialXOR = 0;
-		int subArrayXOR = 0;
+		int subsetXOR = 0;
+		int n = nums.length;
 
-		if (nums.length == 0)
-			return sum;
+		// Run a loop to build all 2^n
+		// subsets one by one
+		for (int i = 0; i < (1 << n); i++) {
 
-		if (nums.length == 1)
-			return nums[0];
+			// build current subset
+			for (int j = 0; j < n; j++) {
 
-		if (nums.length == 2)
-			return (nums[0] ^ nums[1]) + nums[0] + nums[1];
-
-		sum = Arrays.stream(nums).sum();
-
-		for (int sub = 1; sub < nums.length; sub++) {
-			for (int i = 0; i < nums.length - sub; i++) {
-				subArrayXOR = subsetXOR(Arrays.copyOfRange(nums, i, sub + i));
-				for (int j = sub + i; j < nums.length; j++) {
-					partialXOR = subArrayXOR ^ nums[j];
-					sum += partialXOR;
-				}
+				// (1<<j) is a number with jth bit 
+				// so when this bit == 1 and we 'and' them with the
+				// subset number we get which numbers
+				// are present in the subset and which
+				// are not
+				if ((i & (1 << j)) > 0)
+					subsetXOR ^= nums[j];
 			}
+			sum += subsetXOR;
+			subsetXOR = 0;
 		}
 
 		return sum;
 	}
 
-	private int subsetXOR(int[] input) {
-		if (input.length == 1)
-			return input[0];
-		else {
-			return Arrays.stream(input).reduce(0, (acc, item) -> acc ^ item);
-		}
-	}
-
 	public static void main(String[] args) {
-		int[][] input = { { 1, 3 }, { 5, 1, 6 }, {3,4,5,6,7,8} };
+		int[][] input = { { 1, 3 }, { 5, 1, 6 }, { 3, 4, 5, 6, 7, 8 } };
 		int[] expectedOutput = { 6, 28, 480 };
 
 		Solution solution = new Solution();
